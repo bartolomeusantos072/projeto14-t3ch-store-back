@@ -4,7 +4,6 @@ import bcrypt from "bcrypt"
 import authRegisterSchema from "../schemas/authSchema.js"
 
 
-console.log("oi")
 export async function creatUser(req,res){
     console.log("oi")
     const  { username , email , password , confirmPassword } = req.body
@@ -24,7 +23,7 @@ try{
 
    await db.collection("users").insertOne({username , email , password:misticPassword })
 
-   return res.send("foi")
+   return res.status(201).send("created")
 
 }catch(e){
     console.log(e)
