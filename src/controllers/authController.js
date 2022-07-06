@@ -1,7 +1,7 @@
 
 import db from "../db/mongo.js"
 import bcrypt from "bcrypt"
-import authRegisterSchema from "../schemas/authSchema.js"
+import { authRegisterSchema , loginSchema} from "../schemas/authSchema.js"
 
 
 export async function creatUser(req,res){
@@ -30,3 +30,6 @@ try{
 }
 }
 
+export async function loginUser(req,res){
+
+}
