@@ -48,13 +48,14 @@ export async function loginUser(req, res) {
         if (!decriptedPass) {
             return res.status(422).send("email ou senha incorretos")
         }
-        
-        console.log(findUser.password)
-        const dados = { id: findUser._id , email:findUser.email}
+
+        const dados = { id: findUser._id, email: findUser.email }
         const token = jwt.sign(dados, process.env.JWT_SECRET, {
             expiresIn: process.env.JWT_EXPIRES_IN,
-          });
-        res.send(token)
+        });
+        const name = findUser.username
+        await db.collection("sessions").insertOne({ token, userId: findUser._id , email:findUser.email})
+        res.status(200).send({token , name})
     } catch (e) { console.log(e) }
 
 }
