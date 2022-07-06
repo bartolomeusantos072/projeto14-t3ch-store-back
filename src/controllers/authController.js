@@ -1,6 +1,8 @@
 
 import db from "../db/mongo.js"
 import bcrypt from "bcrypt"
+import jwt from "jsonwebtoken"
+
 import { authRegisterSchema, loginSchema } from "../schemas/authSchema.js"
 
 
@@ -41,13 +43,18 @@ export async function loginUser(req, res) {
         if (!findUser) {
             return res.status(422).send("email ou senha incorretos")
         }
-        
+
         const decriptedPass = bcrypt.compareSync(password, findUser.password)
         if (!decriptedPass) {
             return res.status(422).send("email ou senha incorretos")
         }
+        
         console.log(findUser.password)
-        res.send("confere")
+        const dados = { id: findUser._id , email:findUser.email}
+        const token = jwt.sign(dados, process.env.JWT_SECRET, {
+            expiresIn: process.env.JWT_EXPIRES_IN,
+          });
+        res.send(token)
     } catch (e) { console.log(e) }
 
 }
