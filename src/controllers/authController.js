@@ -1,5 +1,5 @@
 
-import db from "../db/mongo.js"
+import db from "../db/mongodb.js"
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 
