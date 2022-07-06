@@ -30,11 +30,24 @@ export async function creatUser(req, res) {
 }
 
 export async function loginUser(req, res) {
- const { email , password } = req.body
+    const { email, password } = req.body
 
-  const { error } = loginSchema.validate({email , password})
-  if(error){
-      return res.status(422).send("email ou senha incorretos")
-  }
-  res.send("confere")
+    const { error } = loginSchema.validate({ email, password })
+    if (error) {
+        return res.status(422).send("email ou senha incorretos")
+    }
+    try {
+        const findUser = await db.collection("users").findOne({ email })
+        if (!findUser) {
+            return res.status(422).send("email ou senha incorretos")
+        }
+        
+        const decriptedPass = bcrypt.compareSync(password, findUser.password)
+        if (!decriptedPass) {
+            return res.status(422).send("email ou senha incorretos")
+        }
+        console.log(findUser.password)
+        res.send("confere")
+    } catch (e) { console.log(e) }
+
 }
