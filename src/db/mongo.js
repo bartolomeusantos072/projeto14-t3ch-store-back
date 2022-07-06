@@ -15,7 +15,4 @@ try {
   console.error('Aconteceu um problema ao conectar o banco de dados...');
 }
 
-export {
-    db,
-    ObjectId
-}
+export default db

@@ -1,9 +1,10 @@
 import joi from 'joi';
 
-export const authRegisterSchema = joi.object({
-  name: joi.string().required(),
+ const authRegisterSchema = joi.object({
+  username: joi.string().required(),
   email: joi.string().email().required(),
   password: joi.string().required(),
   confirmPassword: joi.ref('password')
 });
 
+export default authRegisterSchema;
