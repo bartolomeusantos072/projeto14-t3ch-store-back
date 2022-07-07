@@ -53,9 +53,9 @@ export async function loginUser(req, res) {
         const token = jwt.sign(dados, process.env.JWT_SECRET, {
             expiresIn: process.env.JWT_EXPIRES_IN,
         });
-        const name = findUser.username
-        await db.collection("sessions").insertOne({ token, userId: findUser._id , email:findUser.email})
-        res.status(200).send({token , name})
+        const id = findUser._id
+        await db.collection("sessions").insertOne({ token, userId:findUser._id , email:findUser.email})
+        res.status(200).send({token , id})
     } catch (e) { console.log(e) }
 
 }
