@@ -1,12 +1,31 @@
-import {Router} from "express";
-import { getCart, getOwnedCards, postBuyCards, postProductToCart } from "../controllers/cartController";
+
+
+import { Router } from "express";
+
+import {
+  getCart,
+  postProductToCart,
+  putQuantityOfCart,
+  deleteProductFromCart,
+} from "../controllers/cartController.js";
+
+import {
+  getCartValidation,
+  postAndPutProductToCartValidation,
+  deleteProductFromCartValidation,
+} from "../schemas/cartSchema.js";
+
+import  {validateToken}  from "../middlaware/tokenValidation.js";
 
 const cartRouter = Router();
+cartRouter.use(validateToken);
+cartRouter.get("/cart", getCartValidation, getCart);
+cartRouter.post("/cart", postAndPutProductToCartValidation, postProductToCart);
+cartRouter.put("/cart", postAndPutProductToCartValidation, putQuantityOfCart);
+cartRouter.delete(
+  "/cart/:productId",
+  deleteProductFromCartValidation,
+  deleteProductFromCart
+);
 
-cartRouter.post("/cartpost",postProductToCart);
-cartRouter.post("/cartbuy",postBuyCards);
-cartRouter.get("cart-get",getCart);
-cartRouter.get("cartowned",getOwnedCards);
-
-export  default cartRouter;
-//adicionar isso depois removo o comentario
+export default cartRouter;

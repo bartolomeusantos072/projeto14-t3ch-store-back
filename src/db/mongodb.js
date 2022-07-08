@@ -15,4 +15,6 @@ try {
   console.error('Aconteceu um problema ao conectar o banco de dados...');
 }
 
-export default db
+const objectId = ObjectId;
+
+export  { db, mongoClient, objectId };  

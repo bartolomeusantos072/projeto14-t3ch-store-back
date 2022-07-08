@@ -1,13 +1,13 @@
-import { db, client, objectId } from '../db/mongo.js';
+import  { db, mongoClient, objectId } from '../db/mongodb.js';;
 
 export async function getProducts(request, response) {
-
     try {
-        client.connect();
+        mongoClient.connect();
         const products = await db.collection('products').find().toArray();
         response.status(200).send(products);
-        await client.close();
+        await mongoClient.close();
     } catch (error) {
+        console.log(error)
         response.status(500).send(error);
     };
 };
@@ -18,16 +18,16 @@ export async function registerProducts(request, response) {
     
     try {
 
-        client.connect();
+         mongoClient.connect();
 
         await db.collection('products').insertMany(products);
         
-        await client.close();
+        await mongoClient.close();
         response.sendStatus(201);
         
     } catch (error) {
-
-        await client.close();
+        console.log(error)
+        await mongoClient.close();
         response.sendStatus(500);
     }
 };
@@ -38,17 +38,17 @@ export async function showProduct(request, response) {
 
     try {
         
-        client.connect();
+        mongoClient.connect();
 
         const product = await db.collection('products').findOne({ _id: objectId(id) });
         if (!product) return response.sendStatus(404);
 
-        await client.close();
+        await mongoClient.close();
         response.status(202).send(product);
 
     } catch (error) {
 
-        await client.close();
+        await mongoClient.close();
         response.sendStatus(500);
     }
 };

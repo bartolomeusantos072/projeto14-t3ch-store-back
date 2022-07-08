@@ -1,5 +1,5 @@
 
-import db from "../db/mongodb.js"
+import { db } from "../db/mongodb.js"
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 
@@ -8,7 +8,6 @@ import { authRegisterSchema, loginSchema } from "../schemas/authSchema.js"
 
 export async function creatUser(req, res) {
     const { username, email, password, confirmPassword } = req.body
-
 
     const { error } = authRegisterSchema.validate({ username, email, password, confirmPassword })
 
