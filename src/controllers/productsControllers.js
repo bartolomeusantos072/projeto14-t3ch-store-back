@@ -29,7 +29,7 @@ export async function registerProducts(request, response) {
 
         await client.close();
         response.sendStatus(500);
-    }
+    };
 };
 
 export async function showProduct(request, response) {
@@ -44,11 +44,33 @@ export async function showProduct(request, response) {
         if (!product) return response.sendStatus(404);
 
         await client.close();
-        response.status(202).send(product);
+        response.status(202).send(product); 
 
     } catch (error) {
 
         await client.close();
         response.sendStatus(500);
     }
+};
+
+export async function addToCart(request, response) {
+
+    const { _id } = request.body;
+
+    try {
+        
+        client.connect(); 
+        
+        const product = await db.collection('products').findOne({ _id: objectId(_id) });
+        if (!product) return response.sendStatus(403);
+        
+        await db.collection('products').insertOne({ productID: objectId(_id) });
+        
+        await client.close();
+        response.status(202).send(product);
+        
+    } catch (error) {
+        await client.close();
+        response.sendStatus(500);  
+    };
 };
