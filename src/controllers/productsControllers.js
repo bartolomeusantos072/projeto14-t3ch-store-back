@@ -51,17 +51,17 @@ export async function showProduct(request, response) {
 
 export async function addToCart(request, response) {
 
-    const { productId } = request.body;
+    const { productId, userId } = request.body;
     
     try {
         
         const product = await db.collection('products').findOne({ _id: ObjectId(productId) });
         if (!product) return response.sendStatus(404);
         
-        const cartProduct = await db.collection('cart').findOne({ productId: productId });
+        const cartProduct = await db.collection('cart').findOne({ productId: productId, userId });
         
         if (cartProduct) {
-            await db.collection('cart').updateOne({ productId: productId }, {$inc: {amount: 1}})
+            await db.collection('cart').updateOne({ productId: productId, userId }, {$inc: {amount: 1}})
         } else {
             await db.collection('cart').insertOne({ ...request.body });
         }
