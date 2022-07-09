@@ -1,34 +1,35 @@
-import { db, client, objectId } from '../db/mongo.js';
+import db from '../db/mongodb.js';
+import { MongoClient, ObjectId } from 'mongodb';
 
 export async function getProducts(request, response) {
 
     try {
-        client.connect();
+        
         const products = await db.collection('products').find().toArray();
         response.status(200).send(products);
-        await client.close();
+        
     } catch (error) {
         response.status(500).send(error);
     };
 };
-
+  
 export async function registerProducts(request, response) {
     
     const products = request.body;
     
     try {
 
-        client.connect();
-
-        await db.collection('products').insertMany(products);
         
-        await client.close();
+
+        await db.collection('products').insertMany(products); 
+        
+        
         response.sendStatus(201);
         
     } catch (error) {
 
-        await client.close();
-        response.sendStatus(500);
+        
+        response.sendStatus(500);  
     };
 };
 
@@ -38,17 +39,17 @@ export async function showProduct(request, response) {
 
     try {
         
-        client.connect();
+        
 
-        const product = await db.collection('products').findOne({ _id: objectId(id) });
+        const product = await db.collection('products').findOne({ _id: ObjectId(id) });
         if (!product) return response.sendStatus(404);
 
-        await client.close();
+        
         response.status(202).send(product); 
 
     } catch (error) {
 
-        await client.close();
+        
         response.sendStatus(500);
     }
 };
@@ -59,18 +60,19 @@ export async function addToCart(request, response) {
 
     try {
         
-        client.connect(); 
+         await db.collection('cart').insertMany(request.body)
+         response.sendStatus(200)   
         
-        const product = await db.collection('products').findOne({ _id: objectId(_id) });
+        /* const product = await db.collection('products').findOne({ _id: ObjectId(_id) });
         if (!product) return response.sendStatus(403);
         
-        await db.collection('products').insertOne({ productID: objectId(_id) });
+        await db.collection('products').insertOne({ productID: ObjectId(_id) });
         
-        await client.close();
+        
         response.status(202).send(product);
-        
+ */
     } catch (error) {
-        await client.close();
+        
         response.sendStatus(500);  
     };
 };

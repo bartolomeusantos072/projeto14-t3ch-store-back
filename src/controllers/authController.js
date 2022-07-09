@@ -2,6 +2,9 @@
 import db from "../db/mongodb.js"
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
+import dotenv from 'dotenv'
+
+dotenv.config() 
 
 import { authRegisterSchema, loginSchema } from "../schemas/authSchema.js"
 
@@ -56,6 +59,6 @@ export async function loginUser(req, res) {
         const id = findUser._id
         await db.collection("sessions").insertOne({ token, userId:findUser._id , email:findUser.email})
         res.status(200).send({token , id})
-    } catch (e) { console.log(e) }
+    } catch (e) { console.log(e) } 
 
 }
