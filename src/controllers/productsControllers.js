@@ -1,5 +1,5 @@
 import db from '../db/mongodb.js';
-import { MongoClient, ObjectId } from 'mongodb';
+import { ObjectId } from 'mongodb';
 
 export async function getProducts(request, response) {
 
@@ -9,7 +9,9 @@ export async function getProducts(request, response) {
         response.status(200).send(products);
         
     } catch (error) {
+
         response.status(500).send(error);
+        
     };
 };
   
@@ -19,17 +21,14 @@ export async function registerProducts(request, response) {
     
     try {
 
-        
-
         await db.collection('products').insertMany(products); 
-        
         
         response.sendStatus(201);
         
     } catch (error) {
 
-        
-        response.sendStatus(500);  
+        response.sendStatus(500); 
+         
     };
 };
 
@@ -39,38 +38,36 @@ export async function showProduct(request, response) {
 
     try {
         
-        
-
         const product = await db.collection('products').findOne({ _id: ObjectId(id) });
         if (!product) return response.sendStatus(404);
-
         
         response.status(202).send(product); 
 
     } catch (error) {
 
-        
         response.sendStatus(500);
     }
 };
 
 export async function addToCart(request, response) {
 
-    const { _id } = request.body;
-
+    const { productId } = request.body;
+    
     try {
         
-         await db.collection('cart').insertMany(request.body)
-         response.sendStatus(200)   
+        const product = await db.collection('products').findOne({ _id: ObjectId(productId) });
+        if (!product) return response.sendStatus(404);
         
-        /* const product = await db.collection('products').findOne({ _id: ObjectId(_id) });
-        if (!product) return response.sendStatus(403);
+        const cartProduct = await db.collection('cart').findOne({ productId: productId });
         
-        await db.collection('products').insertOne({ productID: ObjectId(_id) });
+        if (cartProduct) {
+            await db.collection('cart').updateOne({ productId: productId }, {$inc: {amount: 1}})
+        } else {
+            await db.collection('cart').insertOne({ ...request.body });
+        }
         
-        
-        response.status(202).send(product);
- */
+        response.status(202).send(cartProduct); 
+
     } catch (error) {
         
         response.sendStatus(500);  
