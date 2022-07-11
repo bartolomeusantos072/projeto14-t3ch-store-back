@@ -4,14 +4,19 @@ import { ObjectId } from 'mongodb';
 
 export async function getCart(request, response) {
 
-    
-	const {userId}= request.body;
+    const { authorization } = request.headers;
+    const token = authorization?.replace('Bearer ', '');
+    if(!token) return response.status(401).send('Usuário não autorizado!');
 
     try {
-       
-        const cart = await db.collection('cart').find({userId}).toArray();
+
+        const session = await db.collection('sessions').findOne({ token });
+        if(!session) return response.status(404).send('Sessão não encontrada!');
+
+        const cart = await db.collection('cart').find({ userId: String(session.userId) }).toArray(); 
+        
         response.status(200).send(cart);
-        console.log(cart);
+        
     } catch (error) {
 
         response.status(500).send(error);
