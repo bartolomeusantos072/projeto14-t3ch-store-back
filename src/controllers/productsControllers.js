@@ -1,6 +1,6 @@
 
-import { db } from '../db/mongo.js';
-import   { objectId }  from '../db/mongo.js';
+import { db } from '../db/mongodb.js';
+import   { objectId }  from '../db/mongodb.js';
 
 
 export async function getProducts(request, response) {

@@ -1,5 +1,5 @@
 
-import  { db }  from "../db/mongo.js"
+import  { db }  from "../db/mongodb.js"
 
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
@@ -54,7 +54,7 @@ export async function loginUser(req, res) {
 
         const dados = { id: findUser._id, email: findUser.email }
         const token = jwt.sign(dados, process.env.JWT_SECRET, {
-            expiresIn: process.env.JWT_EXPIRES_IN,
+            expiresIn: process.env.EXPIRE,
         });
         const id = findUser._id
         await db.collection("sessions").insertOne({ token, userId:findUser._id , email:findUser.email})
