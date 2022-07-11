@@ -1,15 +1,15 @@
-import { MongoClient , ObjectId } from 'mongodb';
+import { MongoClient, ObjectId } from 'mongodb';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
 let db = null;
 
-const mongoClient = new MongoClient(process.env.MONGO_URL);
+const client = new MongoClient(process.env.MONGO_URL);
 
 try {
-  await mongoClient.connect();
-  db = mongoClient.db(process.env.MONGO_DB);
+  await client.connect();
+  db = client.db(process.env.MONGO_DB);
   console.log('Banco de dados conectado com sucesso...');
 } catch (error) {
   console.error('Aconteceu um problema ao conectar o banco de dados...');
@@ -17,4 +17,4 @@ try {
 
 const objectId = ObjectId;
 
-export  { db, mongoClient, objectId };  
+export  {db, client, objectId};  
