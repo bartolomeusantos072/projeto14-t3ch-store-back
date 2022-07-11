@@ -1,4 +1,6 @@
-import db from "../db/mongodb.js"
+
+import  { db }  from "../db/mongodb.js"
+
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 import dotenv from 'dotenv'
@@ -10,7 +12,6 @@ import { authRegisterSchema, loginSchema } from "../schemas/authSchema.js"
 
 export async function creatUser(req, res) {
     const { username, email, password, confirmPassword } = req.body
-
 
     const { error } = authRegisterSchema.validate({ username, email, password, confirmPassword })
 
@@ -53,7 +54,7 @@ export async function loginUser(req, res) {
 
         const dados = { id: findUser._id, email: findUser.email }
         const token = jwt.sign(dados, process.env.JWT_SECRET, {
-            expiresIn: process.env.JWT_EXPIRES_IN,
+            expiresIn: process.env.EXPIRE,
         });
         const id = findUser._id
         await db.collection("sessions").insertOne({ token, userId:findUser._id , email:findUser.email})

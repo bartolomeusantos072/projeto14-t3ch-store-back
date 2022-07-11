@@ -1,5 +1,6 @@
-import db from '../db/mongodb.js';
-import { ObjectId } from 'mongodb';
+
+import { db } from '../db/mongodb.js';
+import   { objectId }  from '../db/mongodb.js';
 
 
 export async function getProducts(request, response) {
@@ -16,11 +17,14 @@ export async function getProducts(request, response) {
     };
 };
   
+
 export async function registerProducts(request, response) {
     
     const products = request.body;
+  
     
     try {
+
 
         await db.collection('products').insertMany(products); 
         
@@ -31,6 +35,7 @@ export async function registerProducts(request, response) {
         response.sendStatus(500); 
          
     };
+
 };
 
 export async function showProduct(request, response) {
@@ -39,7 +44,8 @@ export async function showProduct(request, response) {
 
     try {
         
-        const product = await db.collection('products').findOne({ _id: ObjectId(id) });
+
+        const product = await db.collection('products').findOne({ _id: objectId(id) });
         if (!product) return response.sendStatus(404);
         
         response.status(202).send(product); 
@@ -49,4 +55,5 @@ export async function showProduct(request, response) {
         response.sendStatus(500);
     }
 };
+
 
